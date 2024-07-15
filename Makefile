@@ -47,7 +47,14 @@ check_format:
 # Building
 .PHONY: set_environment
 set_environment:
-	command -v emcc &> /dev/null && EXEC_ENVIRONMENT="" && echo '\033[1m=== Using native mode ===\033[0m' && echo 'Emscripten from' && which emcc || (EXEC_ENVIRONMENT=echo ${DOCKER_EXEC_ENVIRONMENT} && echo '\033[1m === Using docker environment === \033[0m')
+ifeq ($(shell command -v emcc >/dev/null 2>&1; echo $$?), 0)
+	$(info === Using native mode ===)
+    $(eval EXEC_ENVIRONMENT := "")
+    $(info Emscripten from $(shell which emcc))
+else
+	$(info === Using docker environment === )
+    $(eval EXEC_ENVIRONMENT := ${DOCKER_EXEC_ENVIRONMENT})
+endif
 
 build/data:
 	${ROOT_DIR}/scripts/generate_uni.sh
