@@ -15,14 +15,14 @@ RUN apt-get update -qq \
     && mkdir -p /etc/apt/preferences.d/ \
     && apt-get update -qq \
     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
+    && sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
     && apt-get update \
-    && apt-get install -y google-chrome-stable \
+    && apt-get install -y chromium-browser \
     && apt-get clean \
-    && export CHROME_BIN=/usr/bin/google-chrome \
+    && export CHROME_BIN=/usr/bin/chromium-browser \
     && rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/google.list
 
-ARG EMSDK_VERSION="3.1.56"
+ARG EMSDK_VERSION="3.1.63"
 RUN mkdir -p /opt/emsdk \
     && cd /opt/emsdk \
     && curl -SL https://github.com/emscripten-core/emsdk/archive/${EMSDK_VERSION}.tar.gz | tar -xz --strip-components=1 \
